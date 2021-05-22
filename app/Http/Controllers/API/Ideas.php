@@ -5,6 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Http\Resources\API\IdeaResource;
+use App\Models\Idea;
+
 class Ideas extends Controller
 {
     /**
@@ -14,7 +17,7 @@ class Ideas extends Controller
      */
     public function index()
     {
-        //
+        return IdeaResource::collection(Idea::all());
     }
 
     /**
@@ -25,7 +28,10 @@ class Ideas extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $idea = Idea::create($data);
+
+        return new IdeaResource($idea);
     }
 
     /**
@@ -34,9 +40,9 @@ class Ideas extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Idea $idea)
     {
-        //
+        return new IdeaResource($idea);
     }
 
     /**
@@ -46,9 +52,12 @@ class Ideas extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Idea $idea)
     {
-        //
+        $data = $request->all();
+        $idea->fill($data)->save();
+
+        return new IdeaResource($idea);
     }
 
     /**
@@ -57,8 +66,10 @@ class Ideas extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Idea $idea)
     {
-        //
+        $idea->delete();
+
+        return response(null, 204);
     }
 }
