@@ -15,6 +15,7 @@ class IdeaResource extends JsonResource
     public function toArray($request)
     {
         return [ 
+            "id" => $this->id,
             "description" => $this->description,
             "tags" => $this->tags,
             "likes" => $this->likes,
